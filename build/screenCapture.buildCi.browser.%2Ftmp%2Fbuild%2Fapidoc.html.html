@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/gruntjs/grunt-contrib-csslint#readme"
-
-    >grunt-contrib-csslint (v2.0.0)</a>
+    <a href="https://github.com/gruntjs/grunt-contrib-csslint#readme">grunt-contrib-csslint (v2.0.0)</a>
 </h1>
 <h4>Lint CSS files</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.grunt-contrib-csslint">module grunt-contrib-csslint</a><ol>
 
@@ -108,17 +101,17 @@
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">grunt-contrib-csslint = function (grunt) {
-  grunt.registerMultiTask(&#x27;csslint&#x27;, &#x27;Lint CSS files with csslint&#x27;, function() {
-    var csslint = require(&#x27;csslint&#x27;).CSSLint;
-    var stripJsonComments = require(&#x27;strip-json-comments&#x27;);
+  grunt.registerMultiTask('csslint', 'Lint CSS files with csslint', function() {
+    var csslint = require('csslint').CSSLint;
+    var stripJsonComments = require('strip-json-comments');
     var ruleset = {};
     var verbose = grunt.verbose;
     var externalOptions = {};
     var combinedResult = {};
     var options = this.options();
-    var path = require(&#x27;path&#x27;);
-    var _ = require(&#x27;lodash&#x27;);
-    var chalk = require(&#x27;chalk&#x27;);
+    var path = require('path');
+    var _ = require('lodash');
+    var chalk = require('chalk');
     var absoluteFilePaths = options.absoluteFilePathsForFormatters || false;
 
     // Read CSSLint options from a specified csslintrc file.
@@ -134,8 +127,8 @@
     options = _.assign(options, externalOptions);
 
     // if we have disabled explicitly unspecified rules
-    var defaultDisabled = options[&#x27;*&#x27;] === false;
-    delete options[&#x27;*&#x27;];
+    var defaultDisabled = options['*'] === false;
+    delete options['*'];
 
     csslint.getRules().forEach(function(rule) {
       if (options[rule.id] || !defaultDisabled) {
@@ -153,7 +146,7 @@
     var hadErrors = 0;
     this.filesSrc.forEach(function(filepath) {
       var file = grunt.file.read(filepath),
-        message = &#x27;Linting &#x27; + chalk.cyan(filepath) + &#x27;...&#x27;,
+        message = 'Linting ' + chalk.cyan(filepath) + '...',
         result;
 
       // skip empty files
@@ -172,43 +165,43 @@
 
         result.messages.forEach(function(message) {
           var offenderMessage;
-          if (message.line !== &#x27;undefined&#x27;) {
+          if (message.line !== 'undefined') {
             offenderMessage =
-              chalk.yellow(&#x27;L&#x27; + message.line) +
-              chalk.red(&#x27;:&#x27;) +
-              chalk.yellow(&#x27;C&#x27; + message.col);
+              chalk.yellow('L' + message.line) +
+              chalk.red(':') +
+              chalk.yellow('C' + message.col);
           } else {
-            offenderMessage = chalk.yellow(&#x27;GENERAL&#x27;);
+            offenderMessage = chalk.yellow('GENERAL');
           }
 
-          if (!options.quiet &#x26;&#x26; !options.quiet_all || options.quiet &#x26;&#x26; message.type === &#x27;error&#x27; &#x26;&#x26; !options.quiet_all) {
-            grunt.log.writeln(chalk.red(&#x27;[&#x27;) + offenderMessage + chalk.red(&#x27;]&#x27;));
-            grunt.log[ message.type === &#x27;error&#x27; ? &#x27;error&#x27; : &#x27;writeln&#x27; ](
-              message.type.toUpperCase() + &#x27;: &#x27; +
-              message.message + &#x27; &#x27; +
+          if (!options.quiet &amp;&amp; !options.quiet_all || options.quiet &amp;&amp; message.type === 'error' &amp;&amp; !options.quiet_all) {
+            grunt.log.writeln(chalk.red('[') + offenderMessage + chalk.red(']'));
+            grunt.log[ message.type === 'error' ? 'error' : 'writeln' ](
+              message.type.toUpperCase() + ': ' +
+              message.message + ' ' +
               message.rule.desc +
-              &#x27; (&#x27; + message.rule.id + &#x27;)&#x27; +
-              &#x27; Browsers: &#x27; + message.rule.browsers
+              ' (' + message.rule.id + ')' +
+              ' Browsers: ' + message.rule.browsers
             );
           }
 
-          if (message.type === &#x27;error&#x27;) {
+          if (message.type === 'error') {
             hadErrors += 1;
           }
         });
       } else {
-        grunt.log.writeln(&#x27;Skipping empty file &#x27; + chalk.cyan(filepath) + &#x27;.&#x27;);
+        grunt.log.writeln('Skipping empty file ' + chalk.cyan(filepath) + '.');
       }
 
     });
 
     // formatted output
-    if (options.formatters &#x26;&#x26; Array.isArray(options.formatters)) {
+    if (options.formatters &amp;&amp; Array.isArray(options.formatters)) {
       options.formatters.forEach(function (formatterDefinition) {
         var formatterId = formatterDefinition.id;
 
-        if (formatterId &#x26;&#x26; formatterDefinition.dest) {
-          if (!csslint.hasFormat(formatterId) &#x26;&#x26; typeof formatterId === &#x27;object&#x27;) { // A custom formatter was supplied
+        if (formatterId &amp;&amp; formatterDefinition.dest) {
+          if (!csslint.hasFormat(formatterId) &amp;&amp; typeof formatterId === 'object') { // A custom formatter was supplied
             csslint.addFormatter(formatterId);
 
             formatterId = formatterId.id;
@@ -270,3 +263,4 @@
     ]
 </div>
 </div>
+</body></html>

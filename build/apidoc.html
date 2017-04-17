@@ -61,12 +61,206 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.grunt-contrib-csslint">module grunt-contrib-csslint</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-contrib-csslint.grunt-contrib-csslint">
+            function <span class="apidocSignatureSpan"></span>grunt-contrib-csslint
+            <span class="apidocSignatureSpan">(grunt)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-contrib-csslint.toString">
+            function <span class="apidocSignatureSpan">grunt-contrib-csslint.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.grunt-contrib-csslint.toString">module grunt-contrib-csslint.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.grunt-contrib-csslint.toString.toString">
+            function <span class="apidocSignatureSpan">grunt-contrib-csslint.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.grunt-contrib-csslint" id="apidoc.module.grunt-contrib-csslint">module grunt-contrib-csslint</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-contrib-csslint.grunt-contrib-csslint" id="apidoc.element.grunt-contrib-csslint.grunt-contrib-csslint">
+        function <span class="apidocSignatureSpan"></span>grunt-contrib-csslint
+        <span class="apidocSignatureSpan">(grunt)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">grunt-contrib-csslint = function (grunt) {
+  grunt.registerMultiTask(&#x27;csslint&#x27;, &#x27;Lint CSS files with csslint&#x27;, function() {
+    var csslint = require(&#x27;csslint&#x27;).CSSLint;
+    var stripJsonComments = require(&#x27;strip-json-comments&#x27;);
+    var ruleset = {};
+    var verbose = grunt.verbose;
+    var externalOptions = {};
+    var combinedResult = {};
+    var options = this.options();
+    var path = require(&#x27;path&#x27;);
+    var _ = require(&#x27;lodash&#x27;);
+    var chalk = require(&#x27;chalk&#x27;);
+    var absoluteFilePaths = options.absoluteFilePathsForFormatters || false;
+
+    // Read CSSLint options from a specified csslintrc file.
+    if (options.csslintrc) {
+      var contents = grunt.file.read(options.csslintrc);
+      externalOptions = JSON.parse(stripJsonComments(contents));
+      // delete csslintrc option to not confuse csslint if a future release
+      // implements a rule or options on its own
+      delete options.csslintrc;
+    }
+
+    // merge external options with options specified in gruntfile
+    options = _.assign(options, externalOptions);
+
+    // if we have disabled explicitly unspecified rules
+    var defaultDisabled = options[&#x27;*&#x27;] === false;
+    delete options[&#x27;*&#x27;];
+
+    csslint.getRules().forEach(function(rule) {
+      if (options[rule.id] || !defaultDisabled) {
+        ruleset[rule.id] = 1;
+      }
+    });
+
+    for (var rule in options) {
+      if (!options[rule]) {
+        delete ruleset[rule];
+      } else {
+        ruleset[rule] = options[rule];
+      }
+    }
+    var hadErrors = 0;
+    this.filesSrc.forEach(function(filepath) {
+      var file = grunt.file.read(filepath),
+        message = &#x27;Linting &#x27; + chalk.cyan(filepath) + &#x27;...&#x27;,
+        result;
+
+      // skip empty files
+      if (file.length) {
+        result = csslint.verify(file, ruleset);
+        verbose.write(message);
+        if (result.messages.length) {
+          verbose.or.write(message);
+          grunt.log.error();
+        } else {
+          verbose.ok();
+        }
+
+        // store combined result for later use with formatters
+        combinedResult[filepath] = result;
+
+        result.messages.forEach(function(message) {
+          var offenderMessage;
+          if (message.line !== &#x27;undefined&#x27;) {
+            offenderMessage =
+              chalk.yellow(&#x27;L&#x27; + message.line) +
+              chalk.red(&#x27;:&#x27;) +
+              chalk.yellow(&#x27;C&#x27; + message.col);
+          } else {
+            offenderMessage = chalk.yellow(&#x27;GENERAL&#x27;);
+          }
+
+          if (!options.quiet &#x26;&#x26; !options.quiet_all || options.quiet &#x26;&#x26; message.type === &#x27;error&#x27; &#x26;&#x26; !options.quiet_all) {
+            grunt.log.writeln(chalk.red(&#x27;[&#x27;) + offenderMessage + chalk.red(&#x27;]&#x27;));
+            grunt.log[ message.type === &#x27;error&#x27; ? &#x27;error&#x27; : &#x27;writeln&#x27; ](
+              message.type.toUpperCase() + &#x27;: &#x27; +
+              message.message + &#x27; &#x27; +
+              message.rule.desc +
+              &#x27; (&#x27; + message.rule.id + &#x27;)&#x27; +
+              &#x27; Browsers: &#x27; + message.rule.browsers
+            );
+          }
+
+          if (message.type === &#x27;error&#x27;) {
+            hadErrors += 1;
+          }
+        });
+      } else {
+        grunt.log.writeln(&#x27;Skipping empty file &#x27; + chalk.cyan(filepath) + &#x27;.&#x27;);
+      }
+
+    });
+
+    // formatted output
+    if (options.formatters &#x26;&#x26; Array.isArray(options.formatters)) {
+      options.formatters.forEach(function (formatterDefinition) {
+        var formatterId = formatterDefinition.id;
+
+        if (formatterId &#x26;&#x26; formatterDefinition.dest) {
+          if (!csslint.hasFormat(formatterId) &#x26;&#x26; typeof formatterId === &#x27;object&#x27;) { // A custom formatter was supplied
+            csslint.addFormatter(formatterId);
+
+            formatterId = formatterId.id;
+          }
+
+          var formatter = csslint.getFormatter(formatterId);
+          if (formatter) {
+            var output = formatter.startFormat();
+            _.each(combinedResult, function (result, filename) {
+              if (absoluteFilePaths) {
+                filename = path.resolve(filename);
+              }
+              output += formatter.formatResults(result, filename, {});
+            });
+            output += formatter.endFormat();
+            grunt.file.w ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-contrib-csslint.toString" id="apidoc.element.grunt-contrib-csslint.toString">
+        function <span class="apidocSignatureSpan">grunt-contrib-csslint.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.grunt-contrib-csslint.toString" id="apidoc.module.grunt-contrib-csslint.toString">module grunt-contrib-csslint.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.grunt-contrib-csslint.toString.toString" id="apidoc.element.grunt-contrib-csslint.toString.toString">
+        function <span class="apidocSignatureSpan">grunt-contrib-csslint.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
 
 </div>
 
