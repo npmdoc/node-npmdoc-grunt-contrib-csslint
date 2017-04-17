@@ -1,9 +1,11 @@
 # api documentation for  [grunt-contrib-csslint (v2.0.0)](https://github.com/gruntjs/grunt-contrib-csslint#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-grunt-contrib-csslint.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-grunt-contrib-csslint) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-grunt-contrib-csslint.svg)](https://travis-ci.org/npmdoc/node-npmdoc-grunt-contrib-csslint)
 #### Lint CSS files
 
-[![NPM](https://nodei.co/npm/grunt-contrib-csslint.png?downloads=true)](https://www.npmjs.com/package/grunt-contrib-csslint)
+[![NPM](https://nodei.co/npm/grunt-contrib-csslint.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/grunt-contrib-csslint)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-grunt-contrib-csslint_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-grunt-contrib-csslint/build/screenCapture.npmPackageListing.svg)
 
@@ -75,37 +77,29 @@
     "main": "tasks/csslint.js",
     "maintainers": [
         {
-            "name": "tkellen",
-            "email": "tyler@sleekcode.net"
+            "name": "tkellen"
         },
         {
-            "name": "jzaefferer",
-            "email": "joern.zaefferer@gmail.com"
+            "name": "jzaefferer"
         },
         {
-            "name": "cowboy",
-            "email": "cowboy@rj3.net"
+            "name": "cowboy"
         },
         {
-            "name": "shama",
-            "email": "kyle@dontkry.com"
+            "name": "shama"
         },
         {
-            "name": "vladikoff",
-            "email": "vlad@vladikoff.com"
+            "name": "vladikoff"
         },
         {
-            "name": "sindresorhus",
-            "email": "sindresorhus@gmail.com"
+            "name": "sindresorhus"
         },
         {
-            "name": "jmeas",
-            "email": "jellyes2@gmail.com"
+            "name": "jmeas"
         }
     ],
     "name": "grunt-contrib-csslint",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/gruntjs/grunt-contrib-csslint.git"
@@ -116,16 +110,6 @@
     "version": "2.0.0"
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module grunt-contrib-csslint](#apidoc.module.grunt-contrib-csslint)
-
-
-
-# <a name="apidoc.module.grunt-contrib-csslint"></a>[module grunt-contrib-csslint](#apidoc.module.grunt-contrib-csslint)
 
 
 
